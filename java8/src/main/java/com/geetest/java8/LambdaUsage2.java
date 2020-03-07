@@ -45,6 +45,6 @@ public class LambdaUsage2 {
 //        List<Apple> byBiPredicate = filterByBiPredicate(appleList, (c, w) -> "green".equals(c) && w > 120);
 //        System.out.println(byBiPredicate);
 
-        
+
     }
 }
