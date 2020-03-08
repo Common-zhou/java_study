@@ -56,5 +56,23 @@ public class StreamTest {
         //跳过元素
         List<Dish> dishes = menu.stream().skip(5).collect(toList());
         System.out.println(dishes);
+
+        //映射  map
+        System.out.println("========================");
+        List<String> stringList = menu.stream().map(Dish::getName).collect(toList());
+        System.out.println(stringList);
+
+        System.out.println("========================");
+        List<Integer> collect1 = menu.stream().map(Dish::getName).map(String::length).collect(toList());
+        System.out.println(collect1);
+
+        System.out.println("========================");
+        List<String> list = Arrays.asList("Java 8", "Lambdas", "In", "Action");
+        List<Integer> collect2 = list.stream().map(String::length).collect(toList());
+        System.out.println(collect2);
+        System.out.println("========================");
+        Stream<String> stringStream = Stream.of("Java 8", "Lambdas", "In", "Action");
+        List<Integer> collect3 = stringStream.map(String::length).collect(toList());
+        System.out.println(collect3);
     }
 }
