@@ -1,11 +1,10 @@
 package com.geetest.java8;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.OptionalDouble;
-import java.util.OptionalInt;
+import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @Description:
@@ -38,8 +37,23 @@ public class NumbericStream {
         average.ifPresent(System.out::println);
 
         Stream<Integer> boxed = menu.stream().mapToInt(Dish::getCalories).boxed();
-        boolean b = boxed.allMatch((a) -> a > 800);
-        System.out.println(b);
+        boolean match = boxed.allMatch((a) -> a > 800);
+        System.out.println(match);
+
+        IntStream.range(1, 100).forEach(System.out::println);
+        System.out.println("==========================");
+
+        int a = 9;
+        List<int[]> collect = IntStream.rangeClosed(1, 100).filter((b) -> Math.sqrt(a * a + b * b) % 1 == 0).boxed().map((b) -> new int[]{a, b, (int) Math.sqrt(a * a + b * b)}).collect(toList());
+        collect.forEach((element) -> System.out.println(Arrays.toString(element)));
+        System.out.println("==========================");
+
+        List<int[]> collect1 = IntStream.rangeClosed(1, 100).boxed().flatMap(x ->
+                IntStream.rangeClosed(x, 100).filter((y) -> Math.sqrt(x * x + y * y) % 1 == 0)
+                        .mapToObj(y -> new int[]{x, y, (int) Math.sqrt(x * x + y * y)})).collect(toList());
+
+        collect1.forEach(x -> System.out.println(Arrays.toString(x)));
+
 
     }
 }
