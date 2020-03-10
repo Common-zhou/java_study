@@ -57,6 +57,9 @@ public class CollectorsTest2 {
         //  minBy(Comparator<? super T> comparator)
         testMaxBy();
 
+        System.out.println("==============================");
+        //	partitioningBy(Predicate<? super T> predicate)
+        testPartitioningBy();
     }
 
     private static void testAveragingDouble() {
@@ -114,5 +117,27 @@ public class CollectorsTest2 {
 
         Optional<Dish> collect1 = menu.stream().collect(Collectors.minBy((a, b) -> a.getCalories() - b.getCalories()));
         collect1.ifPresent(System.out::println);
+    }
+
+    private static void testPartitioningBy() {
+        //	partitioningBy(Predicate<? super T> predicate)
+        Map<Boolean, List<Dish>> collect = menu.stream().collect(Collectors.partitioningBy(Dish::isVegetarian));
+        for (Map.Entry<Boolean, List<Dish>> booleanListEntry : collect.entrySet()) {
+            System.out.println(booleanListEntry.getKey());
+            System.out.println(booleanListEntry.getValue());
+        }
+
+        System.out.println("=======================================");
+        Map<Boolean, List<Dish>> collect1 = menu.stream().collect(Collectors.partitioningBy(dish -> dish.getCalories() > 500));
+        for (Map.Entry<Boolean, List<Dish>> booleanListEntry : collect1.entrySet()) {
+            System.out.println(booleanListEntry.getKey());
+            System.out.println(booleanListEntry.getValue());
+        }
+
+        System.out.println("=========================================");
+        Map<Boolean, Long> collect2 = menu.stream().collect(Collectors.partitioningBy(dish -> dish.getCalories() > 500, Collectors.counting()));
+        for (Map.Entry<Boolean, Long> booleanLongEntry : collect2.entrySet()) {
+            System.out.println(booleanLongEntry.getKey() + " " + booleanLongEntry.getValue());
+        }
     }
 }
