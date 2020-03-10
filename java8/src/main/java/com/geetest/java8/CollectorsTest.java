@@ -68,25 +68,46 @@ public class CollectorsTest {
 
         System.out.println("======================");
         //自定义分组
-        Map<CaloricLevel, List<Dish>> collect1 = menu.stream().collect(groupingBy(dish -> {
+        Map<String, List<Dish>> collect1 = menu.stream().collect(groupingBy(dish -> {
             if (dish.getCalories() < 400) {
-                return CaloricLevel.DIET;
+                return "HEALTHY";
             } else if (dish.getCalories() < 700) {
-                return CaloricLevel.NORMAL;
+                return "NORMAL";
             } else {
-                return CaloricLevel.FAT;
+                return "FAT";
             }
         }));
-        for (Map.Entry<CaloricLevel, List<Dish>> typeListEntry : collect1.entrySet()) {
+        for (Map.Entry<String, List<Dish>> typeListEntry : collect1.entrySet()) {
             System.out.println(typeListEntry.getKey());
             System.out.println(typeListEntry.getValue());
         }
 
+        System.out.println("==========================");
 
-    }
+        //首先按照卡路里分组  之后按照类型分组
+        Map<Dish.Type, Map<String, List<Dish>>> collect2 = menu.stream().collect(groupingBy(Dish::getType, groupingBy(dish -> {
+            if (dish.getCalories() < 400) {
+                return "HEALTHY";
+            } else if (dish.getCalories() < 700) {
+                return "NORMAL";
+            } else {
+                return "FAT";
+            }
+        })));
+        for (Map.Entry<Dish.Type, Map<String, List<Dish>>> typeMapEntry : collect2.entrySet()) {
+            System.out.println(typeMapEntry.getKey());
+            System.out.println(typeMapEntry.getValue());
+        }
 
-    enum CaloricLevel {
-        DIET, NORMAL, FAT
+
+        System.out.println("=====================");
+        Map<Dish.Type, Long> collect3 = menu.stream().collect(groupingBy(Dish::getType, counting()));
+        for (Map.Entry<Dish.Type, Long> typeLongEntry : collect3.entrySet()) {
+            System.out.println(typeLongEntry.getKey());
+            System.out.println(typeLongEntry.getValue());
+        }
+
+
     }
 
     private static Map<Integer, List<Transaction>> classifyCollectors(List<Transaction> transactions) {
