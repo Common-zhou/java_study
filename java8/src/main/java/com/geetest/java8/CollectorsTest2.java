@@ -1,10 +1,8 @@
 package com.geetest.java8;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
 /**
@@ -60,6 +58,16 @@ public class CollectorsTest2 {
         System.out.println("==============================");
         //	partitioningBy(Predicate<? super T> predicate)
         testPartitioningBy();
+
+        System.out.println("=============================");
+        //  reducing(BinaryOperator<T> op)
+        testReducing();
+
+        System.out.println("=============================");
+        testSummarizing();
+
+        System.out.println("=============================");
+        testToCollection();
     }
 
     private static void testAveragingDouble() {
@@ -68,6 +76,7 @@ public class CollectorsTest2 {
         System.out.println(menu.stream().collect(Collectors.averagingLong(Dish::getCalories)));
     }
 
+    //TODO
     private static void testCollectingAndThen() {
 //        menu.stream().collect(Collectors.collectingAndThen(Collectors.averagingInt(Dish::getCalories), ))
     }
@@ -76,6 +85,7 @@ public class CollectorsTest2 {
         System.out.println(menu.stream().collect(Collectors.counting()));
     }
 
+    //TODO
     private static void testGroupingBy() {
         Map<Dish.Type, List<Dish>> collect = menu.stream().collect(Collectors.groupingBy(Dish::getType));
         for (Map.Entry<Dish.Type, List<Dish>> stringListEntry : collect.entrySet()) {
@@ -139,5 +149,46 @@ public class CollectorsTest2 {
         for (Map.Entry<Boolean, Long> booleanLongEntry : collect2.entrySet()) {
             System.out.println(booleanLongEntry.getKey() + " " + booleanLongEntry.getValue());
         }
+    }
+
+    //TODO
+    private static void testReducing() {
+        //  reducing(BinaryOperator<T> op)
+        menu.stream().collect(Collectors.reducing(BinaryOperator.maxBy((a, b) -> a.getCalories() - b.getCalories()))).ifPresent(System.out::println);
+    }
+
+    //summarizingDouble(ToDoubleFunction<? super T> mapper)
+    private static void testSummarizing() {
+        System.out.println(menu.stream().collect(Collectors.summingInt(Dish::getCalories)));
+        System.out.println(menu.stream().collect(Collectors.summingDouble(Dish::getCalories)));
+        System.out.println(menu.stream().collect(Collectors.summingLong(Dish::getCalories)));
+
+        System.out.println("==========summarizingDouble==========");
+        System.out.println(menu.stream().collect(Collectors.summarizingDouble(Dish::getCalories)));
+        DoubleSummaryStatistics collect = menu.stream().collect(Collectors.summarizingDouble(Dish::getCalories));
+        System.out.println("collect.getMax() = " + collect.getMax());
+        System.out.println("collect.getMin() = " + collect.getMin());
+        System.out.println("collect.getAverage() = " + collect.getAverage());
+        System.out.println("collect.getCount() = " + collect.getCount());
+        System.out.println("collect.getSum() = " + collect.getSum());
+    }
+
+    //	toCollection(Supplier<C> collectionFactory)
+    private static void testToCollection() {
+        ArrayList<Dish> collect = menu.stream().collect(Collectors.toCollection(ArrayList::new));
+        System.out.println(collect);
+
+        HashSet<Dish> collect1 = menu.stream().collect(Collectors.toCollection(HashSet::new));
+        System.out.println(collect1);
+
+
+        //toConcurrentMap(Function<? super T,? extends K> keyMapper, Function<? super T,? extends U> valueMapper)
+        ConcurrentMap<String, Dish.Type> collect2 = menu.stream().collect(Collectors.toConcurrentMap(Dish::getName, Dish::getType));
+        for (Map.Entry<String, Dish.Type> typeStringEntry : collect2.entrySet()) {
+            System.out.println(typeStringEntry.getKey() + ":" + typeStringEntry.getValue());
+        }
+
+        //toConcurrentMap(Function<? super T,? extends K> keyMapper, Function<? super T,? extends U> valueMapper, BinaryOperator<U> mergeFunction)
+//        menu.stream().collect(Collectors.toConcurrentMap(dish->dish.getName(), dish->dish.getType(), ))
     }
 }
