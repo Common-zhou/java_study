@@ -56,6 +56,6 @@ public class TestStrings {
         assertThat(CharMatcher.javaDigit().matches('5'), equalTo(true));
         assertThat(CharMatcher.javaDigit().matches('x'), equalTo(false));
         assertThat(CharMatcher.is('A').countIn("A boy can do everything for a girl"), equalTo(1));
-        
+
     }
 }
