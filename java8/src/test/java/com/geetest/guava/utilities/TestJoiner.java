@@ -15,7 +15,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * @Date: 2020/3/25
  * @Time 10:46
  */
-public class TestUtilities {
+public class TestJoiner {
     final List<String> stringList = Arrays.asList("zhou", "bing", "Java", "Guava");
     final List<String> stringListWithNullValue = Arrays.asList("zhou", "bing", "Java", "Guava", null);
 
